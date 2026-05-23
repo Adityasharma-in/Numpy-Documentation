@@ -1,0 +1,897 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NumPy Masterclass — Complete Reference</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,sans-serif;background:#0b0e17;color:#e2e8f0;line-height:1.7;display:flex;min-height:100vh}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0b0e17}
+::-webkit-scrollbar-thumb{background:#2d3748;border-radius:3px}
+::selection{background:#6366f1;color:#fff}
+.sidebar{position:fixed;top:0;left:0;width:280px;height:100vh;background:rgba(15,20,33,0.95);border-right:1px solid rgba(99,102,241,0.15);overflow-y:auto;z-index:100;padding:1.5rem 0;backdrop-filter:blur(12px)}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar-header{padding:0 1.25rem 1.25rem;border-bottom:1px solid rgba(99,102,241,0.15);margin-bottom:1rem}
+.sidebar-header h1{font-size:1.1rem;font-weight:700;color:#f1f5f9;background:linear-gradient(135deg,#818cf8,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sidebar-header .subtitle{font-size:0.72rem;color:#64748b;margin-top:0.15rem;-webkit-text-fill-color:#64748b}
+.sidebar-nav{list-style:none;padding:0}
+.sidebar-nav li{margin:0}
+.sidebar-nav .module-label{display:block;padding:0.6rem 1.25rem 0.3rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6366f1}
+.sidebar-nav a{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 1.25rem 0.35rem 1.75rem;font-size:0.8rem;color:#94a3b8;text-decoration:none;transition:all 0.15s;border-left:2px solid transparent}
+.sidebar-nav a:hover,.sidebar-nav a.active{color:#e2e8f0;background:rgba(99,102,241,0.06);border-left-color:#6366f1}
+.sidebar-nav a .topic-num{color:#6366f1;font-weight:600;font-size:0.7rem;min-width:1.5rem}
+.main{margin-left:280px;flex:1;max-width:100%;padding:0}
+.hero{padding:4rem 3rem 3rem;background:linear-gradient(160deg,#0f1421 0%,#1a1f35 50%,#0f1421 100%);border-bottom:1px solid rgba(99,102,241,0.12)}
+.hero h1{font-size:2.6rem;font-weight:700;line-height:1.2;background:linear-gradient(135deg,#f1f5f9 0%,#818cf8 60%,#6366f1 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{margin-top:0.75rem;font-size:1.05rem;color:#94a3b8;max-width:720px}
+.hero .badge-row{margin-top:1.25rem;display:flex;gap:0.5rem;flex-wrap:wrap}
+.squircle{display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.75rem;border-radius:8px;font-size:0.72rem;font-weight:600;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);color:#a5b4fc}
+.squircle.green{background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.2);color:#6ee7b7}
+.squircle.amber{background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.2);color:#fcd34d}
+.content{padding:2.5rem 3rem 5rem;max-width:1100px}
+.topic-card{margin-bottom:2.5rem;background:rgba(18,24,41,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(99,102,241,0.08);border-radius:18px;padding:2rem 2.25rem;transition:border-color 0.2s,box-shadow 0.2s;position:relative}
+.topic-card:hover{border-color:rgba(99,102,241,0.2);box-shadow:0 8px 32px rgba(99,102,241,0.04)}
+.topic-card h2{font-size:1.35rem;font-weight:700;color:#f1f5f9;margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem}
+.topic-card h2 .topic-num{color:#818cf8;font-weight:700}
+.topic-card .concept-anchor{background:rgba(99,102,241,0.06);border-left:3px solid #6366f1;padding:0.75rem 1rem;border-radius:0 10px 10px 0;margin-bottom:1.25rem;font-size:0.88rem;color:#b8c4db;line-height:1.6}
+.topic-card .concept-anchor strong{color:#a5b4fc}
+.topic-card h3{font-size:0.95rem;font-weight:600;color:#c7d2fe;margin:1.25rem 0 0.6rem;display:flex;align-items:center;gap:0.4rem}
+.topic-card h3::before{content:'';display:inline-block;width:4px;height:14px;background:#6366f1;border-radius:2px}
+.rule-list{list-style:none;padding:0}
+.rule-list li{position:relative;padding:0.4rem 0 0.4rem 1.25rem;font-size:0.85rem;color:#cbd5e1;border-bottom:1px solid rgba(99,102,241,0.04)}
+.rule-list li::before{content:'\2192';position:absolute;left:0;color:#6366f1;font-weight:700}
+.rules-table{width:100%;border-collapse:collapse;margin:0.6rem 0 0.5rem;font-size:0.82rem;background:rgba(0,0,0,0.15);border-radius:10px;overflow:hidden}
+.rules-table th{background:rgba(99,102,241,0.12);color:#a5b4fc;font-weight:600;text-align:left;padding:0.55rem 0.9rem;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em}
+.rules-table td{padding:0.5rem 0.9rem;border-top:1px solid rgba(99,102,241,0.06);color:#cbd5e1}
+.rules-table tr:nth-child(even) td{background:rgba(99,102,241,0.02)}
+.code-block{background:rgba(0,0,0,0.4);border:1px solid rgba(99,102,241,0.1);border-radius:12px;padding:1rem 1.25rem;margin:0.6rem 0 0.75rem;font-family:'JetBrains Mono','Cascadia Code','Fira Code','Consolas',monospace;font-size:0.78rem;line-height:1.65;overflow-x:auto;color:#e2e8f0;tab-size:4;position:relative;white-space:pre-wrap}
+.code-block .kw{color:#818cf8}
+.code-block .fn{color:#6ee7b7}
+.code-block .str{color:#fcd34d}
+.code-block .cm{color:#64748b;font-style:italic;display:block}
+.code-block .num{color:#fca5a5}
+.code-block .op{color:#f472b6}
+.code-block .out{color:#94a3b8;display:block}
+.code-block .out::before{content:'# '}
+.inline-code{background:rgba(0,0,0,0.35);padding:0.15rem 0.45rem;border-radius:5px;font-family:'Consolas',monospace;font-size:0.82em;color:#a5b4fc;border:1px solid rgba(99,102,241,0.08)}
+.copy-btn{position:absolute;top:0.5rem;right:0.75rem;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#94a3b8;padding:0.25rem 0.55rem;border-radius:6px;cursor:pointer;font-size:0.68rem;font-family:inherit;transition:all 0.15s;opacity:0}
+.code-block:hover .copy-btn{opacity:1}
+.copy-btn:hover{background:rgba(99,102,241,0.2);color:#e2e8f0}
+.callout{padding:0.75rem 1rem;border-radius:10px;margin:0.75rem 0;font-size:0.83rem;display:flex;align-items:flex-start;gap:0.6rem}
+.callout.warn{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:#fcd34d}
+.callout.info{background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.12);color:#a5b4fc}
+.callout.danger{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15);color:#fca5a5}
+.mem-breakdown{display:grid;grid-template-columns:auto 1fr auto;gap:0.3rem 0.8rem;background:rgba(0,0,0,0.2);border-radius:10px;padding:0.75rem 1rem;margin:0.5rem 0 0.75rem;font-size:0.8rem}
+.mem-breakdown .label{color:#64748b;font-weight:500}
+.mem-breakdown .value{color:#e2e8f0;font-family:'Consolas',monospace}
+.mem-breakdown .comment{color:#6ee7b7;font-size:0.75rem}
+@media(max-width:900px){.sidebar{width:220px}.main{margin-left:220px}.content{padding:1.5rem 1.25rem}.hero{padding:2.5rem 1.25rem 2rem}.topic-card{padding:1.25rem}}
+@media(max-width:640px){.sidebar{width:100%;height:auto;position:relative;border-right:none;border-bottom:1px solid rgba(99,102,241,0.12);max-height:40vh}.main{margin-left:0}.content{padding:1rem}.hero h1{font-size:1.8rem}.sidebar-nav a{padding:0.3rem 1rem}}
+</style>
+</head>
+<body>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>NumPy Masterclass</h1>
+    <div class="subtitle">Complete Reference &bull; 22 Topics</div>
+  </div>
+  <ul class="sidebar-nav" id="sidebarNav">
+    <li class="module-label">Module 1 &middot; Foundational Core</li>
+    <li><a href="#topic1"><span class="topic-num">01</span> Introduction &amp; Architecture</a></li>
+    <li><a href="#topic2"><span class="topic-num">02</span> ndarray &amp; dtypes</a></li>
+    <li><a href="#topic4"><span class="topic-num">03</span> Array Attributes</a></li>
+    <li class="module-label">Module 2 &middot; Initialization &amp; Structure</li>
+    <li><a href="#topic3"><span class="topic-num">04</span> Creation Architecture</a></li>
+    <li><a href="#topic6"><span class="topic-num">05</span> Shape Transformation</a></li>
+    <li><a href="#topic16"><span class="topic-num">06</span> Views vs. Copies</a></li>
+    <li class="module-label">Module 3 &middot; Selection &amp; Traversal</li>
+    <li><a href="#topic5"><span class="topic-num">07</span> Indexing &amp; Slicing</a></li>
+    <li><a href="#topic12"><span class="topic-num">08</span> Filtering &amp; Masking</a></li>
+    <li><a href="#topic13"><span class="topic-num">09</span> Fancy Indexing</a></li>
+    <li class="module-label">Module 4 &middot; Math &amp; Broadcasting</li>
+    <li><a href="#topic7"><span class="topic-num">10</span> Element-wise Ops</a></li>
+    <li><a href="#topic8"><span class="topic-num">11</span> Broadcasting</a></li>
+    <li><a href="#topic9"><span class="topic-num">12</span> Universal Functions</a></li>
+    <li class="module-label">Module 5 &middot; Reduction &amp; Manipulation</li>
+    <li><a href="#topic10"><span class="topic-num">13</span> Aggregation</a></li>
+    <li><a href="#topic11"><span class="topic-num">14</span> Axis-Based Ops</a></li>
+    <li><a href="#topic14"><span class="topic-num">15</span> Sorting &amp; Search</a></li>
+    <li><a href="#topic15"><span class="topic-num">16</span> Structural Manipulation</a></li>
+    <li class="module-label">Module 6 &middot; Real-World Pipelines</li>
+    <li><a href="#topic17"><span class="topic-num">17</span> Missing Data</a></li>
+    <li><a href="#topic18"><span class="topic-num">18</span> Random Subsystem</a></li>
+    <li><a href="#topic19"><span class="topic-num">19</span> Linear Algebra</a></li>
+    <li><a href="#topic20"><span class="topic-num">20</span> Data Science Workflows</a></li>
+    <li><a href="#topic21"><span class="topic-num">21</span> Performance &amp; Vectorization</a></li>
+    <li><a href="#topic22"><span class="topic-num">22</span> Applied Use Cases</a></li>
+  </ul>
+</nav>
+<div class="main">
+  <header class="hero">
+    <h1>NumPy: The Definitive Reference</h1>
+    <p>A complete guide to NumPy &mdash; from basic arrays to real-world data pipelines. Every topic has simple explanations and runnable code examples.</p>
+    <div class="badge-row">
+      <span class="squircle">v1.26+</span>
+      <span class="squircle green">22 Topics</span>
+      <span class="squircle amber">6 Modules</span>
+      <span class="squircle">C-Engine</span>
+      <span class="squircle green">Production Grade</span>
+    </div>
+  </header>
+  <div class="content">
+    <!-- MODULE 1: FOUNDATIONAL CORE -->
+    <div class="topic-card" id="topic1">
+      <h2><span class="topic-num">01.</span> Introduction to NumPy</h2>
+      <div class="concept-anchor"><strong>So what is NumPy?</strong> NumPy is a Python library for working with numbers. Lots of them. Fast. Normal Python lists are slow with math because each element is checked one by one. NumPy does everything in one go using C code in the background. That makes it 10&ndash;50&times; faster. It is the foundation of data science in Python &mdash; Pandas, Scikit-learn, TensorFlow all use NumPy underneath.</div>
+      <h3>NumPy vs Python Lists</h3>
+      <table class="rules-table">
+        <tr><th>Feature</th><th>Python List</th><th>NumPy Array</th></tr>
+        <tr><td>Data types</td><td>Can mix types</td><td>One type only</td></tr>
+        <tr><td>Speed</td><td>Slow (Python loop)</td><td>Fast (C loop)</td></tr>
+        <tr><td>Memory</td><td>Scattered in RAM</td><td>One contiguous block</td></tr>
+        <tr><td>Math</td><td>Need for loop</td><td>Direct operators</td></tr>
+      </table>
+      <h3>Installation</h3>
+      <div class="code-block">pip install numpy</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> time
+
+<span class="cm"># Python list — slow, element by element</span>
+py_list <span class="op">=</span> list(range(<span class="num">10_000_000</span>))
+start <span class="op">=</span> time.perf_counter()
+result <span class="op">=</span> [x <span class="op">*</span> <span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> py_list]
+<span class="kw">print</span>(<span class="str">f"Python: {time.perf_counter() - start:.3f}s"</span>)
+
+<span class="cm"># NumPy array — fast, runs C code in background</span>
+np_arr <span class="op">=</span> np.arange(<span class="num">10_000_000</span>, dtype<span class="op">=</span>np.float64)
+start <span class="op">=</span> time.perf_counter()
+result <span class="op">=</span> np_arr <span class="op">*</span> <span class="num">2</span>
+<span class="kw">print</span>(<span class="str">f"NumPy:  {time.perf_counter() - start:.3f}s"</span>)
+
+<span class="out">Python: ~0.48s  |  NumPy: ~0.02s  (20-25x faster)</span>
+      </div>
+    </div>
+    <div class="topic-card" id="topic2">
+      <h2><span class="topic-num">02.</span> ndarray &amp; Data Types</h2>
+      <div class="concept-anchor"><strong>So what is an ndarray?</strong> An ndarray (n-dimensional array) is a grid of values, all of the same type. The type is called <code>dtype</code>. It decides how much memory each element takes. If you have a million integers, using <code>int8</code> (1 byte each) uses way less memory than <code>int64</code> (8 bytes each).</div>
+      <h3>Common Data Types</h3>
+      <table class="rules-table">
+        <tr><th>dtype</th><th>Bytes</th><th>Range</th></tr>
+        <tr><td><code>int8</code></td><td>1</td><td>-128 to 127</td></tr>
+        <tr><td><code>int32</code></td><td>4</td><td>-2 billion to 2 billion</td></tr>
+        <tr><td><code>int64</code></td><td>8</td><td>Very large numbers</td></tr>
+        <tr><td><code>float32</code></td><td>4</td><td>~7 digits precision</td></tr>
+        <tr><td><code>float64</code></td><td>8</td><td>~15 digits precision</td></tr>
+        <tr><td><code>bool</code></td><td>1</td><td>True or False</td></tr>
+      </table>
+      <h3>Key Points</h3>
+      <ul class="rule-list">
+        <li>NumPy picks type automatically. <code>np.array([1, 2, 3])</code> gives <code>int64</code>. Add a decimal like <code>2.5</code> and it becomes <code>float64</code>.</li>
+        <li>Use <code>arr.astype(np.float32)</code> to change type. Going from float64 to float32 loses precision silently.</li>
+        <li>When mixing types, NumPy promotes to the safest one: <code>bool &rarr; int &rarr; float &rarr; complex</code>.</li>
+      </ul>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># NumPy decides the type</span>
+a <span class="op">=</span> np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+<span class="kw">print</span>(<span class="str">"int array:"</span>, a.dtype)  <span class="cm"># int64</span>
+
+<span class="cm"># Mix int and float → becomes float</span>
+b <span class="op">=</span> np.array([<span class="num">1</span>, <span class="num">2.5</span>, <span class="num">3</span>])
+<span class="kw">print</span>(<span class="str">"mixed:"</span>, b.dtype)      <span class="cm"># float64</span>
+
+<span class="cm"># Force a specific type</span>
+c <span class="op">=</span> np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], dtype<span class="op">=</span>np.int8)
+<span class="kw">print</span>(<span class="str">"int8:"</span>, c.dtype, <span class="str">"memory:"</span>, c.nbytes, <span class="str">"bytes"</span>)
+
+<span class="cm"># Convert type</span>
+d <span class="op">=</span> c.astype(np.float32)
+<span class="kw">print</span>(<span class="str">"converted:"</span>, d.dtype)  <span class="cm"># float32</span>
+      </div>
+    </div>
+    <div class="topic-card" id="topic4">
+      <h2><span class="topic-num">03.</span> Array Attributes</h2>
+      <div class="concept-anchor"><strong>What can an array tell you about itself?</strong> Every array has built-in properties: its shape, number of dimensions, total elements, memory usage. These are useful when debugging or managing memory.</div>
+      <h3>Key Attributes</h3>
+      <table class="rules-table">
+        <tr><th>Attribute</th><th>What it means</th><th>Example (3x4 float64)</th></tr>
+        <tr><td><code>.shape</code></td><td>Size of each dimension</td><td><code>(3, 4)</code></td></tr>
+        <tr><td><code>.ndim</code></td><td>How many dimensions</td><td><code>2</code></td></tr>
+        <tr><td><code>.dtype</code></td><td>Type of elements</td><td><code>float64</code></td></tr>
+        <tr><td><code>.size</code></td><td>Total elements</td><td><code>12</code></td></tr>
+        <tr><td><code>.itemsize</code></td><td>Bytes per element</td><td><code>8</code></td></tr>
+        <tr><td><code>.nbytes</code></td><td>Total memory used</td><td><code>96</code></td></tr>
+      </table>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+arr <span class="op">=</span> np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>],
+               [<span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>],
+               [<span class="num">9</span>, <span class="num">10</span>, <span class="num">11</span>, <span class="num">12</span>]], dtype<span class="op">=</span>np.float64)
+
+<span class="kw">print</span>(<span class="str">"shape:"</span>, arr.shape)       <span class="cm"># (3, 4)</span>
+<span class="kw">print</span>(<span class="str">"dimensions:"</span>, arr.ndim)    <span class="cm"># 2</span>
+<span class="kw">print</span>(<span class="str">"type:"</span>, arr.dtype)         <span class="cm"># float64</span>
+<span class="kw">print</span>(<span class="str">"elements:"</span>, arr.size)       <span class="cm"># 12</span>
+<span class="kw">print</span>(<span class="str">"bytes per element:"</span>, arr.itemsize)  <span class="cm"># 8</span>
+<span class="kw">print</span>(<span class="str">"total memory:"</span>, arr.nbytes, <span class="str">"bytes"</span>)  <span class="cm"># 96</span>
+      </div>
+    </div>
+    <!-- MODULE 2 -->
+    <div class="topic-card" id="topic3">
+      <h2><span class="topic-num">04.</span> Creating Arrays</h2>
+      <div class="concept-anchor"><strong>So how do you create arrays?</strong> NumPy has many ways. You can create from a Python list, generate sequences, make arrays of zeros or ones, or create identity matrices. Some methods initialize memory (zeros, ones) and some don't (empty &mdash; which can have garbage data).</div>
+      <h3>Common Functions</h3>
+      <table class="rules-table">
+        <tr><th>Function</th><th>What it creates</th></tr>
+        <tr><td><code>np.array([1, 2, 3])</code></td><td>From a Python list</td></tr>
+        <tr><td><code>np.arange(0, 10, 2)</code></td><td>Sequence like Python range()</td></tr>
+        <tr><td><code>np.linspace(0, 1, 5)</code></td><td>5 evenly spaced numbers from 0 to 1</td></tr>
+        <tr><td><code>np.zeros((3, 4))</code></td><td>All zeros</td></tr>
+        <tr><td><code>np.ones((3, 4))</code></td><td>All ones</td></tr>
+        <tr><td><code>np.full((2, 3), 7)</code></td><td>All elements = 7</td></tr>
+        <tr><td><code>np.eye(4)</code></td><td>Identity matrix (1s on diagonal)</td></tr>
+        <tr><td><code>np.empty((3, 3))</code></td><td>Garbage data &mdash; use with caution</td></tr>
+      </table>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># From a Python list</span>
+a <span class="op">=</span> np.array([[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]])
+
+<span class="cm"># Sequences</span>
+b <span class="op">=</span> np.arange(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>)     <span class="cm"># [0, 2, 4, 6, 8]</span>
+c <span class="op">=</span> np.linspace(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>)   <span class="cm"># [0.0, 0.25, 0.5, 0.75, 1.0]</span>
+
+<span class="cm"># Filled with constants</span>
+d <span class="op">=</span> np.zeros((<span class="num">2</span>, <span class="num">3</span>))       <span class="cm"># all 0</span>
+e <span class="op">=</span> np.ones((<span class="num">2</span>, <span class="num">3</span>))        <span class="cm"># all 1</span>
+f <span class="op">=</span> np.full((<span class="num">2</span>, <span class="num">3</span>), <span class="num">42</span>)    <span class="cm"># all 42</span>
+
+<span class="cm"># Identity matrix</span>
+g <span class="op">=</span> np.eye(<span class="num">3</span>)               <span class="cm"># 3x3 with 1s on diagonal</span>
+
+<span class="cm"># WARNING: empty has garbage values!</span>
+h <span class="op">=</span> np.empty((<span class="num">3</span>, <span class="num">3</span>))
+<span class="kw">print</span>(<span class="str">"empty:"</span>, h)
+      </div>
+    </div>
+    <div class="topic-card" id="topic6">
+      <h2><span class="topic-num">05.</span> Changing Shape</h2>
+      <div class="concept-anchor"><strong>What if your data is in the wrong shape?</strong> You can reshape it. <code>reshape</code> and <code>T</code> change the view without copying data. <code>flatten</code> always makes a copy. Understanding this saves memory.</div>
+      <h3>Key Points</h3>
+      <ul class="rule-list">
+        <li><code>reshape(a, b)</code> &mdash; change to a x b shape. Total elements must stay same. Returns a view.</li>
+        <li><code>ravel()</code> &mdash; flatten to 1D. Returns a view when possible.</li>
+        <li><code>flatten()</code> &mdash; flatten to 1D. Always returns a new copy.</li>
+        <li><code>.T</code> &mdash; transpose (swap rows and columns). Returns a view.</li>
+      </ul>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+arr <span class="op">=</span> np.arange(<span class="num">12</span>).reshape(<span class="num">3</span>, <span class="num">4</span>)
+<span class="kw">print</span>(<span class="str">"original shape:"</span>, arr.shape)
+
+<span class="cm"># reshape — shares memory with original</span>
+r <span class="op">=</span> arr.reshape(<span class="num">2</span>, <span class="num">6</span>)
+r[<span class="num">0</span>, <span class="num">0</span>] <span class="op">=</span> <span class="num">999</span>
+<span class="kw">print</span>(<span class="str">"original changed:"</span>, arr[<span class="num">0</span>, <span class="num">0</span>])  <span class="cm"># 999 (proof it's a view)</span>
+
+<span class="cm"># ravel — 1D view</span>
+v <span class="op">=</span> arr.ravel()
+<span class="kw">print</span>(<span class="str">"ravel shares memory:"</span>, v.base <span class="kw">is</span> arr)  <span class="cm"># True</span>
+
+<span class="cm"># flatten — always a copy</span>
+f <span class="op">=</span> arr.flatten()
+f[<span class="num">0</span>] <span class="op">=</span> <span class="num">0</span>
+<span class="kw">print</span>(<span class="str">"original after flatten change:"</span>, arr[<span class="num">0</span>, <span class="num">0</span>])  <span class="cm"># 999 (unchanged)</span>
+
+<span class="cm"># transpose</span>
+t <span class="op">=</span> arr.T
+<span class="kw">print</span>(<span class="str">"transposed shape:"</span>, t.shape)    <span class="cm"># (4, 3)</span>
+      </div>
+    </div>
+    <div class="topic-card" id="topic16">
+      <h2><span class="topic-num">06.</span> Views vs. Copies</h2>
+      <div class="concept-anchor"><strong>Does your array share memory or not?</strong> Some operations create a view (shares data with original). Others create a copy (independent data). Change a view = changes original. Change a copy = original stays same. Use <code>.base</code> to check: if <code>base is None</code>, it owns its data.</div>
+      <h3>What creates what?</h3>
+      <ul class="rule-list">
+        <li><strong>View:</strong> slicing <code>arr[:]</code>, <code>reshape()</code>, <code>ravel()</code>, <code>.T</code></li>
+        <li><strong>Copy:</strong> <code>.copy()</code>, <code>.flatten()</code>, <code>.astype()</code>, <code>arr[[0, 2]]</code> (fancy indexing), boolean masking</li>
+      </ul>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+original <span class="op">=</span> np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
+
+<span class="cm"># Slicing gives a VIEW — changes affect original</span>
+view <span class="op">=</span> original[<span class="num">1</span>:<span class="num">4</span>]
+view[<span class="num">0</span>] <span class="op">=</span> <span class="num">99</span>
+<span class="kw">print</span>(<span class="str">"original changed:"</span>, original)  <span class="cm"># [1, 99, 3, 4, 5]</span>
+
+<span class="cm"># .copy() gives a COPY — changes do not affect original</span>
+safe <span class="op">=</span> original.copy()
+safe[<span class="num">0</span>] <span class="op">=</span> <span class="num">-1</span>
+<span class="kw">print</span>(<span class="str">"original unchanged:"</span>, original)  <span class="cm"># [1, 99, 3, 4, 5]</span>
+
+<span class="cm"># Check with .base</span>
+<span class="kw">print</span>(<span class="str">"view.base is original?"</span>, view.base <span class="kw">is</span> original)  <span class="cm"># True</span>
+<span class="kw">print</span>(<span class="str">"copy.base is None?"</span>, safe.base <span class="kw">is</span> <span class="kw">None</span>)        <span class="cm"># True</span>
+      </div>
+    </div>
+    <!-- MODULE 3 -->
+    <div class="topic-card" id="topic5">
+      <h2><span class="topic-num">07.</span> Indexing &amp; Slicing</h2>
+      <div class="concept-anchor"><strong>How do you get specific elements?</strong> Use square brackets. <code>arr[0, 2]</code> gets element at row 0, column 2. Slicing <code>[start:stop:step]</code> gets a range. Slices are views &mdash; they don't copy data.</div>
+      <h3>Cheat Sheet</h3>
+      <table class="rules-table">
+        <tr><th>Code</th><th>What it does</th></tr>
+        <tr><td><code>arr[i, j]</code></td><td>Element at row i, column j</td></tr>
+        <tr><td><code>arr[1:4]</code></td><td>Elements at index 1, 2, 3</td></tr>
+        <tr><td><code>arr[::2]</code></td><td>Every other element</td></tr>
+        <tr><td><code>arr[::-1]</code></td><td>Reverse the array</td></tr>
+        <tr><td><code>arr[-1]</code></td><td>Last element</td></tr>
+      </table>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+arr <span class="op">=</span> np.arange(<span class="num">20</span>).reshape(<span class="num">4</span>, <span class="num">5</span>)
+<span class="kw">print</span>(<span class="str">"original:"</span>)
+<span class="kw">print</span>(arr)
+
+<span class="cm"># One element</span>
+<span class="kw">print</span>(<span class="str">"row 0, col 2:"</span>, arr[<span class="num">0</span>, <span class="num">2</span>])
+
+<span class="cm"># Slice a row and some columns</span>
+<span class="kw">print</span>(<span class="str">"row 0, cols 1 to 3:"</span>, arr[<span class="num">0</span>, <span class="num">1</span>:<span class="num">4</span>])
+
+<span class="cm"># Every other row, reversed columns</span>
+<span class="kw">print</span>(<span class="str">"every other row, reversed:"</span>)
+<span class="kw">print</span>(arr[::<span class="num">2</span>, ::<span class="op">-</span><span class="num">1</span>])
+
+<span class="cm"># Last row, last column</span>
+<span class="kw">print</span>(<span class="str">"last element:"</span>, arr[<span class="op">-</span><span class="num">1</span>, <span class="op">-</span><span class="num">1</span>])
+
+<span class="cm"># Modify a slice (affects original because it's a view)</span>
+arr[<span class="num">1</span>:<span class="num">3</span>, <span class="num">2</span>:<span class="num">4</span>] <span class="op">=</span> [[<span class="num">-1</span>, <span class="num">-2</span>], [<span class="num">-3</span>, <span class="num">-4</span>]]
+<span class="kw">print</span>(<span class="str">"after mutation:"</span>)
+<span class="kw">print</span>(arr)
+      </div>
+    </div>
+    <div class="topic-card" id="topic12">
+      <h2><span class="topic-num">08.</span> Filtering &amp; Masking</h2>
+      <div class="concept-anchor"><strong>How do you find elements that match a condition?</strong> Use comparisons like <code>arr &gt; 5</code>. It gives a boolean array. Use that as a mask: <code>arr[mask]</code> gives matching elements. Combine conditions with <code>&amp;</code> (AND), <code>|</code> (OR), <code>~</code> (NOT).</div>
+      <h3>Key Points</h3>
+      <ul class="rule-list">
+        <li><code>arr &gt; 5</code> &mdash; boolean array (True/False per element)</li>
+        <li><code>arr[mask]</code> &mdash; returns matching values as a 1D array (copy)</li>
+        <li>Use <code>(arr &gt; 3) &amp; (arr &lt; 10)</code> for combined conditions</li>
+        <li>Do NOT use Python <code>and</code>/<code>or</code> &mdash; use <code>&amp;</code>/<code>|</code></li>
+      </ul>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+data <span class="op">=</span> np.array([[<span class="num">3</span>, <span class="num">15</span>, <span class="num">-2</span>, <span class="num">7</span>],
+                [<span class="num">0</span>, <span class="num">-5</span>, <span class="num">12</span>, <span class="num">8</span>],
+                [<span class="num">9</span>, <span class="num">4</span>, <span class="num">-1</span>, <span class="num">6</span>]])
+
+<span class="cm"># Find all values > 5</span>
+mask <span class="op">=</span> data <span class="op">&gt;</span> <span class="num">5</span>
+<span class="kw">print</span>(<span class="str">"values > 5:"</span>, data[mask])  <span class="cm"># [15, 7, 12, 8, 9, 6]</span>
+
+<span class="cm"># Values between 0 and 10</span>
+filtered <span class="op">=</span> data[(data <span class="op">&gt;</span> <span class="num">0</span>) <span class="op">&amp;</span> (data <span class="op">&lt;</span> <span class="num">10</span>)]
+<span class="kw">print</span>(<span class="str">"0 < x < 10:"</span>, filtered)
+
+<span class="cm"># Replace all negatives with 0</span>
+data[data <span class="op">&lt;</span> <span class="num">0</span>] <span class="op">=</span> <span class="num">0</span>
+<span class="kw">print</span>(<span class="str">"negatives replaced:"</span>)
+<span class="kw">print</span>(data)
+
+<span class="cm"># np.where — pick from two options</span>
+scores <span class="op">=</span> np.array([<span class="num">42</span>, <span class="num">85</span>, <span class="num">33</span>, <span class="num">91</span>, <span class="num">67</span>])
+result <span class="op">=</span> np.where(scores <span class="op">&gt;=</span> <span class="num">60</span>, <span class="str">"pass"</span>, <span class="str">"fail"</span>)
+<span class="kw">print</span>(<span class="str">"results:"</span>, result)
+      </div>
+    </div>
+    <div class="topic-card" id="topic13">
+      <h2><span class="topic-num">09.</span> Fancy Indexing</h2>
+      <div class="concept-anchor"><strong>What if you want specific elements by their index?</strong> Use a list of indices: <code>arr[[0, 2, 4]]</code>. This is called fancy indexing. Unlike slicing, it always returns a copy.</div>
+      <h3>Key Points</h3>
+      <ul class="rule-list">
+        <li><code>arr[[0, 2, 4]]</code> &mdash; picks rows at those indices (returns a copy)</li>
+        <li><code>arr[[0, 1], [2, 3]]</code> &mdash; picks elements at (0,2) and (1,3)</li>
+        <li>Duplicates are allowed: <code>arr[[0, 0, 1]]</code></li>
+        <li>Fancy indexing is slower than slicing because it copies data element by element.</li>
+      </ul>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+arr <span class="op">=</span> np.arange(<span class="num">20</span>).reshape(<span class="num">4</span>, <span class="num">5</span>)
+<span class="kw">print</span>(<span class="str">"original:"</span>)
+<span class="kw">print</span>(arr)
+
+<span class="cm"># Pick specific rows</span>
+rows <span class="op">=</span> arr[[<span class="num">0</span>, <span class="num">2</span>, <span class="num">3</span>]]
+<span class="kw">print</span>(<span class="str">"rows 0, 2, 3:"</span>)
+<span class="kw">print</span>(rows)
+
+<span class="cm"># Pick by coordinates: (0,0), (1,2), (2,4)</span>
+pairs <span class="op">=</span> arr[[<span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>], [<span class="num">0</span>, <span class="num">2</span>, <span class="num">4</span>]]
+<span class="kw">print</span>(<span class="str">"at specific coords:"</span>, pairs)  <span class="cm"># [0, 7, 14]</span>
+
+<span class="cm"># Fancy indexing always copies</span>
+original <span class="op">=</span> np.array([<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>])
+selected <span class="op">=</span> original[[<span class="num">0</span>, <span class="num">2</span>]]
+selected[<span class="num">0</span>] <span class="op">=</span> <span class="num">999</span>
+<span class="kw">print</span>(<span class="str">"original unchanged:"</span>, original)  <span class="cm"># [10, 20, 30, 40]</span>
+      </div>
+    </div>
+    <!-- MODULE 4 -->
+    <div class="topic-card" id="topic7">
+      <h2><span class="topic-num">10.</span> Element-wise Operations</h2>
+      <div class="concept-anchor"><strong>How do you do math on arrays?</strong> Just use normal operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>. They work on every element automatically. Add a number and it adds to every element. Compare two arrays and you get True/False for each position.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+a <span class="op">=</span> np.array([<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>])
+b <span class="op">=</span> np.array([<span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
+
+<span class="cm"># Math happens on each element</span>
+<span class="kw">print</span>(<span class="str">"a + b:"</span>, a <span class="op">+</span> b)   <span class="cm"># [13, 24, 35]</span>
+<span class="kw">print</span>(<span class="str">"a * b:"</span>, a <span class="op">*</span> b)   <span class="cm"># [30, 80, 150]</span>
+<span class="kw">print</span>(<span class="str">"a / b:"</span>, a <span class="op">/</span> b)   <span class="cm"># [3.33, 5, 6]</span>
+<span class="kw">print</span>(<span class="str">"a ** 2:"</span>, a <span class="op">**</span> <span class="num">2</span>) <span class="cm"># [100, 400, 900]</span>
+
+<span class="cm"># Add a number to every element</span>
+<span class="kw">print</span>(<span class="str">"a + 100:"</span>, a <span class="op">+</span> <span class="num">100</span>)  <span class="cm"># [110, 120, 130]</span>
+
+<span class="cm"># Comparisons give boolean arrays</span>
+<span class="kw">print</span>(<span class="str">"a > 15:"</span>, a <span class="op">&gt;</span> <span class="num">15</span>)     <span class="cm"># [False, True, True]</span>
+<span class="kw">print</span>(<span class="str">"a == b:"</span>, a <span class="op">==</span> b)    <span class="cm"># [False, False, False]</span>
+
+<span class="cm"># In-place: changes the array directly</span>
+a <span class="op">+=</span> <span class="num">5</span>
+<span class="kw">print</span>(<span class="str">"after += 5:"</span>, a)       <span class="cm"># [15, 25, 35]</span>
+      </div>
+    </div>
+    <div class="topic-card" id="topic8">
+      <h2><span class="topic-num">11.</span> Broadcasting</h2>
+      <div class="concept-anchor"><strong>What if the shapes don't match?</strong> Broadcasting stretches the smaller array to fit the bigger one, without copying data. Rules: compare shapes from the right. A dimension works if both have the same size or one is 1.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Normalize each row (subtract row average)</span>
+data <span class="op">=</span> np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>],
+                [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>],
+                [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>],
+                [<span class="num">10</span>, <span class="num">11</span>, <span class="num">12</span>]])  <span class="cm"># shape (4, 3)</span>
+
+<span class="cm"># Row means — keepdims keeps it as (4, 1) instead of (4,)</span>
+row_avg <span class="op">=</span> data.mean(axis<span class="op">=</span><span class="num">1</span>, keepdims<span class="op">=</span><span class="kw">True</span>)
+normalized <span class="op">=</span> data <span class="op">-</span> row_avg  <span class="cm"># (4,3) - (4,1) works because of broadcasting</span>
+<span class="kw">print</span>(<span class="str">"normalized:"</span>)
+<span class="kw">print</span>(normalized)
+<span class="kw">print</span>(<span class="str">"each row avg:"</span>, normalized.mean(axis<span class="op">=</span><span class="num">1</span>))  <span class="cm"># all ~0</span>
+
+<span class="cm"># A (3,4) array times a (4,) array — broadcast works</span>
+A <span class="op">=</span> np.ones((<span class="num">3</span>, <span class="num">4</span>))
+B <span class="op">=</span> np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
+<span class="kw">print</span>(<span class="str">"broadcast result:"</span>)
+<span class="kw">print</span>(A <span class="op">*</span> B)  <span class="cm"># B stretched from (4,) to (3,4)</span>
+
+<span class="cm"># This would fail (uncomment to see):</span>
+<span class="cm"># np.ones((3,4)) + np.ones((3,5))  # shapes don't match</span>
+      </div>
+    </div>
+    <div class="topic-card" id="topic9">
+      <h2><span class="topic-num">12.</span> Universal Functions (ufuncs)</h2>
+      <div class="concept-anchor"><strong>Need math like sin, exp, log?</strong> NumPy has them as ufuncs (universal functions). They work element by element, run in C (fast). Includes trig, exponentials, rounding, and more.</div>
+      <h3>Common ufuncs</h3>
+      <table class="rules-table">
+        <tr><th>Category</th><th>Functions</th></tr>
+        <tr><td>Trig</td><td><code>sin</code>, <code>cos</code>, <code>tan</code></td></tr>
+        <tr><td>Exp/Log</td><td><code>exp</code>, <code>log</code>, <code>log2</code>, <code>log10</code></td></tr>
+        <tr><td>Rounding</td><td><code>floor</code>, <code>ceil</code>, <code>round</code></td></tr>
+        <tr><td>Other</td><td><code>abs</code>, <code>sqrt</code>, <code>sign</code></td></tr>
+      </table>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+vals <span class="op">=</span> np.array([<span class="num">1.0</span>, <span class="num">2.0</span>, <span class="num">3.0</span>, <span class="num">4.0</span>])
+
+<span class="cm"># Math functions</span>
+<span class="kw">print</span>(<span class="str">"sqrt:"</span>, np.sqrt(vals))
+<span class="kw">print</span>(<span class="str">"exp:"</span>, np.exp(vals))
+<span class="kw">print</span>(<span class="str">"log:"</span>, np.log(vals))
+
+<span class="cm"># Rounding</span>
+prices <span class="op">=</span> np.array([<span class="num">19.975</span>, <span class="num">20.001</span>, <span class="num">3.4567</span>])
+<span class="kw">print</span>(<span class="str">"floor:"</span>, np.floor(prices))
+<span class="kw">print</span>(<span class="str">"ceil:"</span>, np.ceil(prices))
+<span class="kw">print</span>(<span class="str">"round:"</span>, np.round(prices, <span class="num">2</span>))
+
+<span class="cm"># Special ufunc methods</span>
+<span class="kw">print</span>(<span class="str">"sum:"</span>, np.add.reduce(vals))         <span class="cm"># 10</span>
+<span class="kw">print</span>(<span class="str">"cumulative:"</span>, np.add.accumulate(vals))  <span class="cm"># [1, 3, 6, 10]</span>
+
+<span class="cm"># Outer product</span>
+a <span class="op">=</span> np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+b <span class="op">=</span> np.array([<span class="num">4</span>, <span class="num">5</span>])
+<span class="kw">print</span>(<span class="str">"outer:"</span>)
+<span class="kw">print</span>(np.add.outer(a, b))
+      </div>
+    </div>
+    <!-- MODULE 5 -->
+    <div class="topic-card" id="topic10">
+      <h2><span class="topic-num">13.</span> Aggregation (Min, Max, Mean, etc.)</h2>
+      <div class="concept-anchor"><strong>Need one number from the whole array?</strong> Use <code>.min()</code>, <code>.max()</code>, <code>.mean()</code>, <code>.std()</code>. By default they use all elements. With <code>axis</code> you can summarize along one dimension.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+data <span class="op">=</span> np.array([[<span class="num">22.5</span>, <span class="num">23.1</span>, <span class="num">21.8</span>],
+               [<span class="num">19.4</span>, <span class="num">20.7</span>, <span class="num">21.2</span>],
+               [<span class="num">25.0</span>, <span class="num">24.3</span>, <span class="num">26.1</span>],
+               [<span class="num">18.9</span>, <span class="num">19.5</span>, <span class="num">20.0</span>]])
+
+<span class="kw">print</span>(<span class="str">"min:"</span>, data.<span class="kw">min</span>())     <span class="cm"># 18.9</span>
+<span class="kw">print</span>(<span class="str">"max:"</span>, data.<span class="kw">max</span>())     <span class="cm"># 26.1</span>
+<span class="kw">print</span>(<span class="str">"mean:"</span>, data.mean())  <span class="cm"># ~21.85</span>
+<span class="kw">print</span>(<span class="str">"std:"</span>, data.std())    <span class="cm"># ~2.28</span>
+<span class="kw">print</span>(<span class="str">"sum:"</span>, data.<span class="fn">sum</span>())    <span class="cm"># 262.4</span>
+<span class="kw">print</span>(<span class="str">"median:"</span>, np.median(data))  <span class="cm"># 21.5</span>
+
+<span class="cm"># Find index of minimum value</span>
+idx <span class="op">=</span> data.argmin()
+<span class="kw">print</span>(<span class="str">"min at flat index:"</span>, idx)
+<span class="kw">print</span>(<span class="str">"unraveled:"</span>, np.unravel_index(idx, data.shape))
+      </div>
+    </div>
+    <div class="topic-card" id="topic11">
+      <h2><span class="topic-num">14.</span> Axis-Based Operations</h2>
+      <div class="concept-anchor"><strong>How to work on rows vs columns?</strong> Use <code>axis=0</code> for columns (collapse rows) and <code>axis=1</code> for rows (collapse columns). Think: axis=0 goes down, axis=1 goes across.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+arr <span class="op">=</span> np.arange(<span class="num">12</span>).reshape(<span class="num">3</span>, <span class="num">4</span>)
+<span class="kw">print</span>(<span class="str">"array:"</span>)
+<span class="kw">print</span>(arr)
+
+<span class="cm"># axis=0 — collapse rows (work column by column)</span>
+<span class="kw">print</span>(<span class="str">"sum per column:"</span>, arr.<span class="fn">sum</span>(axis<span class="op">=</span><span class="num">0</span>))   <span class="cm"># [12, 15, 18, 21]</span>
+
+<span class="cm"># axis=1 — collapse columns (work row by row)</span>
+<span class="kw">print</span>(<span class="str">"sum per row:"</span>, arr.<span class="fn">sum</span>(axis<span class="op">=</span><span class="num">1</span>))    <span class="cm"># [6, 22, 38]</span>
+
+<span class="cm"># keepdims preserves shape for broadcasting</span>
+row_means <span class="op">=</span> arr.mean(axis<span class="op">=</span><span class="num">1</span>, keepdims<span class="op">=</span><span class="kw">True</span>)
+<span class="kw">print</span>(<span class="str">"row means (kept shape):"</span>)
+<span class="kw">print</span>(row_means)
+<span class="kw">print</span>(<span class="str">"shape:"</span>, row_means.shape)  <span class="cm"># (3, 1)</span>
+      </div>
+    </div>
+    <div class="topic-card" id="topic14">
+      <h2><span class="topic-num">15.</span> Sorting &amp; Searching</h2>
+      <div class="concept-anchor"><strong>Need to sort or find unique values?</strong> <code>np.sort()</code> returns a sorted copy. <code>argsort()</code> gives the indices that would sort. <code>unique()</code> finds unique values.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+scores <span class="op">=</span> np.array([[<span class="num">85</span>, <span class="num">92</span>, <span class="num">78</span>],
+                  [<span class="num">91</span>, <span class="num">88</span>, <span class="num">95</span>],
+                  [<span class="num">73</span>, <span class="num">80</span>, <span class="num">84</span>]])
+
+<span class="cm"># Sort each row</span>
+<span class="kw">print</span>(<span class="str">"sorted rows:"</span>)
+<span class="kw">print</span>(np.sort(scores))
+
+<span class="cm"># argsort — which position in ranking</span>
+<span class="kw">print</span>(<span class="str">"ranking:"</span>)
+<span class="kw">print</span>(np.argsort(scores, axis<span class="op">=</span><span class="num">1</span>))
+
+<span class="cm"># Find where condition is true</span>
+<span class="kw">print</span>(<span class="str">"positions where > 90:"</span>)
+<span class="kw">print</span>(np.argwhere(scores <span class="op">&gt;</span> <span class="num">90</span>))
+
+<span class="cm"># Unique values</span>
+vals, counts <span class="op">=</span> np.unique(scores, return_counts<span class="op">=</span><span class="kw">True</span>)
+<span class="kw">print</span>(<span class="str">"unique:"</span>, vals)
+<span class="kw">print</span>(<span class="str">"counts:"</span>, counts)
+
+<span class="cm"># Set operations</span>
+a <span class="op">=</span> np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
+b <span class="op">=</span> np.array([<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>])
+<span class="kw">print</span>(<span class="str">"in both:"</span>, np.intersect1d(a, b))   <span class="cm"># [4, 5]</span>
+<span class="kw">print</span>(<span class="str">"in a not b:"</span>, np.setdiff1d(a, b)) <span class="cm"># [1, 2, 3]</span>
+      </div>
+    </div>
+    <div class="topic-card" id="topic15">
+      <h2><span class="topic-num">16.</span> Combining &amp; Splitting Arrays</h2>
+      <div class="concept-anchor"><strong>Need to join arrays or split them?</strong> <code>vstack</code> stacks vertically (adds rows), <code>hstack</code> stacks horizontally (adds columns). <code>vsplit</code>/<code>hsplit</code> split arrays into pieces.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+train <span class="op">=</span> np.array([[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]])
+test  <span class="op">=</span> np.array([[<span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>]])
+
+<span class="cm"># Stack vertically (add rows)</span>
+all_data <span class="op">=</span> np.vstack((train, test))
+<span class="kw">print</span>(<span class="str">"vstack:"</span>)
+<span class="kw">print</span>(all_data)
+
+<span class="cm"># Stack horizontally (add columns)</span>
+labels <span class="op">=</span> np.array([[<span class="num">0</span>], [<span class="num">1</span>]])
+combined <span class="op">=</span> np.hstack((train, labels))
+<span class="kw">print</span>(<span class="str">"hstack:"</span>)
+<span class="kw">print</span>(combined)
+
+<span class="cm"># Split</span>
+big <span class="op">=</span> np.arange(<span class="num">20</span>).reshape(<span class="num">4</span>, <span class="num">5</span>)
+parts <span class="op">=</span> np.vsplit(big, <span class="num">2</span>)
+<span class="kw">print</span>(<span class="str">"split shapes:"</span>, [p.shape <span class="kw">for</span> p <span class="kw">in</span> parts])
+      </div>
+    </div>
+    <!-- MODULE 6 -->
+    <div class="topic-card" id="topic17">
+      <h2><span class="topic-num">17.</span> Missing Data (NaN)</h2>
+      <div class="concept-anchor"><strong>What about missing values?</strong> NaN (Not a Number) marks missing data. Any math with NaN gives NaN. Use <code>np.nanmean()</code>, <code>np.nanstd()</code> to skip NaN. Detect with <code>np.isnan()</code>.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+data <span class="op">=</span> np.array([[<span class="num">1.2</span>, <span class="num">3.4</span>, np.nan],
+               [np.nan, <span class="num">5.6</span>, <span class="num">7.8</span>],
+               [<span class="num">9.0</span>, np.nan, <span class="num">2.1</span>]])
+
+<span class="cm"># Count missing</span>
+<span class="kw">print</span>(<span class="str">"missing:"</span>, np.isnan(data).<span class="fn">sum</span>())  <span class="cm"># 3</span>
+
+<span class="cm"># NaN-safe functions</span>
+<span class="kw">print</span>(<span class="str">"mean (skip nan):"</span>, np.nanmean(data))
+<span class="kw">print</span>(<span class="str">"sum (skip nan):"</span>, np.nansum(data))
+
+<span class="cm"># Replace NaN with column average</span>
+col_avg <span class="op">=</span> np.nanmean(data, axis<span class="op">=</span><span class="num">0</span>, keepdims<span class="op">=</span><span class="kw">True</span>)
+cleaned <span class="op">=</span> np.where(np.isnan(data), col_avg, data)
+<span class="kw">print</span>(<span class="str">"cleaned:"</span>)
+<span class="kw">print</span>(cleaned)
+      </div>
+    </div>
+    <div class="topic-card" id="topic18">
+      <h2><span class="topic-num">18.</span> Random Numbers</h2>
+      <div class="concept-anchor"><strong>Need random data?</strong> Use <code>np.random.default_rng(seed)</code> to create a generator. Get random floats, integers, or normally distributed values. Set a seed for reproducible results.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Create generator with seed for reproducibility</span>
+rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span><span class="num">42</span>)
+
+<span class="cm"># Random floats between 0 and 1</span>
+<span class="kw">print</span>(<span class="str">"uniform:"</span>, rng.random(size<span class="op">=</span><span class="num">5</span>))
+
+<span class="cm"># Random integers</span>
+<span class="kw">print</span>(<span class="str">"dice rolls:"</span>, rng.integers(<span class="num">1</span>, <span class="num">7</span>, size<span class="op">=</span><span class="num">10</span>))
+
+<span class="cm"># Normal distribution</span>
+heights <span class="op">=</span> rng.normal(loc<span class="op">=</span><span class="num">170</span>, scale<span class="op">=</span><span class="num">7.5</span>, size<span class="op">=</span><span class="num">1000</span>)
+<span class="kw">print</span>(<span class="str">"heights:"</span>, <span class="str">f"mean={heights.mean():.1f}"</span>, <span class="str">f"std={heights.std():.1f}"</span>)
+
+<span class="cm"># Same seed = same numbers</span>
+r1 <span class="op">=</span> np.random.default_rng(<span class="num">123</span>)
+r2 <span class="op">=</span> np.random.default_rng(<span class="num">123</span>)
+<span class="kw">assert</span> np.array_equal(r1.random(<span class="num">5</span>), r2.random(<span class="num">5</span>))
+<span class="kw">print</span>(<span class="str">"reproducible: yes"</span>)
+      </div>
+    </div>
+    <div class="topic-card" id="topic19">
+      <h2><span class="topic-num">19.</span> Linear Algebra</h2>
+      <div class="concept-anchor"><strong>Need matrix operations?</strong> Use <code>@</code> for matrix multiply, <code>np.linalg.inv()</code> for inverse, <code>np.linalg.det()</code> for determinant, <code>np.linalg.eig()</code> for eigenvalues.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Solve A @ x = b</span>
+A <span class="op">=</span> np.array([[<span class="num">3.0</span>, <span class="num">1.0</span>], [<span class="num">1.0</span>, <span class="num">2.0</span>]])
+b <span class="op">=</span> np.array([<span class="num">9.0</span>, <span class="num">8.0</span>])
+
+x <span class="op">=</span> np.linalg.inv(A) <span class="op">@</span> b
+<span class="kw">print</span>(<span class="str">"x:"</span>, x)        <span class="cm"># [2., 3.]</span>
+<span class="kw">print</span>(<span class="str">"check:"</span>, A <span class="op">@</span> x)  <span class="cm"># [9., 8.]</span>
+
+<span class="cm"># Determinant</span>
+<span class="kw">print</span>(<span class="str">"det:"</span>, np.linalg.det(A))   <span class="cm"># 5.0</span>
+
+<span class="cm"># Norm (vector length)</span>
+v <span class="op">=</span> np.array([<span class="num">3.0</span>, <span class="num">4.0</span>])
+<span class="kw">print</span>(<span class="str">"norm:"</span>, np.linalg.norm(v))  <span class="cm"># 5.0</span>
+
+<span class="cm"># Eigenvalues</span>
+vals, vecs <span class="op">=</span> np.linalg.eig(A)
+<span class="kw">print</span>(<span class="str">"eigenvalues:"</span>, vals)
+      </div>
+    </div>
+    <div class="topic-card" id="topic20">
+      <h2><span class="topic-num">20.</span> Data Science Workflows (Scaling Data)</h2>
+      <div class="concept-anchor"><strong>How to scale data for ML?</strong> Min-Max scaling pushes values to [0, 1]. Z-score centers at 0 with std=1. Both are one-liners in NumPy. Compute stats on training data only, then apply to test data.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+X <span class="op">=</span> np.array([[<span class="num">10.0</span>, <span class="num">2.0</span>, <span class="num">100</span>],
+              [<span class="num">15.0</span>, <span class="num">3.5</span>, <span class="num">200</span>],
+              [<span class="num">12.0</span>, <span class="num">2.8</span>, <span class="num">150</span>],
+              [<span class="num">18.0</span>, <span class="num">4.2</span>, <span class="num">300</span>],
+              [<span class="num">11.0</span>, <span class="num">2.1</span>, <span class="num">120</span>]])
+
+<span class="cm"># Min-Max: each feature scaled to [0, 1]</span>
+X_min <span class="op">=</span> X.min(axis<span class="op">=</span><span class="num">0</span>, keepdims<span class="op">=</span><span class="kw">True</span>)
+X_max <span class="op">=</span> X.max(axis<span class="op">=</span><span class="num">0</span>, keepdims<span class="op">=</span><span class="kw">True</span>)
+X_norm <span class="op">=</span> (X <span class="op">-</span> X_min) <span class="op">/</span> (X_max <span class="op">-</span> X_min)
+<span class="kw">print</span>(<span class="str">"min-max:"</span>)
+<span class="kw">print</span>(X_norm)
+
+<span class="cm"># Z-score: center at 0, std = 1</span>
+X_mean <span class="op">=</span> X.mean(axis<span class="op">=</span><span class="num">0</span>, keepdims<span class="op">=</span><span class="kw">True</span>)
+X_std <span class="op">=</span> X.std(axis<span class="op">=</span><span class="num">0</span>, keepdims<span class="op">=</span><span class="kw">True</span>)
+X_z <span class="op">=</span> (X <span class="op">-</span> X_mean) <span class="op">/</span> X_std
+<span class="kw">print</span>(<span class="str">"z-score:"</span>)
+<span class="kw">print</span>(X_z)
+<span class="kw">print</span>(<span class="str">"mean ~0:"</span>, X_z.mean(axis<span class="op">=</span><span class="num">0</span>))
+<span class="kw">print</span>(<span class="str">"std ~1:"</span>, X_z.std(axis<span class="op">=</span><span class="num">0</span>))
+
+<span class="cm"># Apply same transform to new data</span>
+new <span class="op">=</span> np.array([[<span class="num">14.0</span>, <span class="num">3.0</span>, <span class="num">180</span>]])
+<span class="kw">print</span>(<span class="str">"new (z-score):"</span>, (new <span class="op">-</span> X_mean) <span class="op">/</span> X_std)
+      </div>
+    </div>
+    <div class="topic-card" id="topic21">
+      <h2><span class="topic-num">21.</span> Performance &amp; Vectorization</h2>
+      <div class="concept-anchor"><strong>Why is NumPy so fast?</strong> It runs C code, not Python loops. <code>float32</code> uses half the memory of <code>float64</code> and can be 2x faster. Keep arrays contiguous for best performance.</div>
+      <h3>Code Example</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> time
+
+N <span class="op">=</span> <span class="num">10_000_000</span>
+
+<span class="cm"># Python loop vs NumPy</span>
+py_list <span class="op">=</span> list(range(N))
+start <span class="op">=</span> time.perf_counter()
+result <span class="op">=</span> [x <span class="op">*</span> <span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> py_list]
+<span class="kw">print</span>(<span class="str">f"Python: {time.perf_counter() - start:.3f}s"</span>)
+
+np_arr <span class="op">=</span> np.arange(N, dtype<span class="op">=</span>np.float64)
+start <span class="op">=</span> time.perf_counter()
+result <span class="op">=</span> np_arr <span class="op">*</span> <span class="num">2</span>
+<span class="kw">print</span>(<span class="str">f"NumPy:  {time.perf_counter() - start:.3f}s"</span>)
+
+<span class="cm"># float32 is faster than float64</span>
+f32 <span class="op">=</span> np.ones(N, dtype<span class="op">=</span>np.float32)
+f64 <span class="op">=</span> np.ones(N, dtype<span class="op">=</span>np.float64)
+
+start <span class="op">=</span> time.perf_counter(); f32.mean(); t32 <span class="op">=</span> time.perf_counter() <span class="op">-</span> start
+start <span class="op">=</span> time.perf_counter(); f64.mean(); t64 <span class="op">=</span> time.perf_counter() <span class="op">-</span> start
+
+<span class="kw">print</span>(<span class="str">f"float32: {t32:.4f}s"</span>)
+<span class="kw">print</span>(<span class="str">f"float64: {t64:.4f}s"</span>)
+<span class="kw">print</span>(<span class="str">f"float32 is {t64/t32:.1f}x faster"</span>)
+      </div>
+    </div>
+    <div class="topic-card" id="topic22">
+      <h2><span class="topic-num">22.</span> Applied Use Cases</h2>
+      <div class="concept-anchor"><strong>Putting it all together.</strong> Three real examples: cleaning server logs (NaN + scaling), processing images (channel math), and smoothing time-series (sliding windows).</div>
+      <h3>1. Clean Server Logs</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+logs <span class="op">=</span> np.array([
+    [<span class="num">1</span>, <span class="num">45.2</span>, <span class="num">62.1</span>, <span class="num">12.5</span>],
+    [<span class="num">2</span>, <span class="num">78.9</span>, <span class="num">81.3</span>, <span class="num">45.2</span>],
+    [<span class="num">3</span>, np.nan, <span class="num">55.0</span>, <span class="num">33.1</span>],
+    [<span class="num">4</span>, <span class="num">62.3</span>, np.nan, <span class="num">28.7</span>],
+    [<span class="num">5</span>, <span class="num">55.6</span>, <span class="num">59.8</span>, np.nan]
+], dtype<span class="op">=</span>np.float64)
+
+means <span class="op">=</span> np.nanmean(logs, axis<span class="op">=</span><span class="num">0</span>, keepdims<span class="op">=</span><span class="kw">True</span>)
+cleaned <span class="op">=</span> np.where(np.isnan(logs), means, logs)
+features <span class="op">=</span> cleaned[:, <span class="num">1</span>:]
+z <span class="op">=</span> (features <span class="op">-</span> features.mean(axis<span class="op">=</span><span class="num">0</span>)) <span class="op">/</span> features.std(axis<span class="op">=</span><span class="num">0</span>)
+<span class="kw">print</span>(<span class="str">"cleaned & scaled:"</span>)
+<span class="kw">print</span>(z)
+      </div>
+      <h3>2. Process RGB Image</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+rng <span class="op">=</span> np.random.default_rng(<span class="num">42</span>)
+img <span class="op">=</span> rng.integers(<span class="num">0</span>, <span class="num">256</span>, (<span class="num">4</span>, <span class="num">4</span>, <span class="num">3</span>), dtype<span class="op">=</span>np.uint8)
+img_f <span class="op">=</span> img.astype(np.float32) / <span class="num">255.0</span>
+
+gray <span class="op">=</span> <span class="num">0.299</span> <span class="op">*</span> img_f[:,:,<span class="num">0</span>] <span class="op">+</span> <span class="num">0.587</span> <span class="op">*</span> img_f[:,:,<span class="num">1</span>] <span class="op">+</span> <span class="num">0.114</span> <span class="op">*</span> img_f[:,:,<span class="num">2</span>]
+<span class="kw">print</span>(<span class="str">"grayscale:"</span>)
+<span class="kw">print</span>(gray)
+
+flipped <span class="op">=</span> img_f[:, ::<span class="op">-</span><span class="num">1</span>, :]
+<span class="kw">print</span>(<span class="str">"flipped shape:"</span>, flipped.shape)
+      </div>
+      <h3>3. Smooth Time-Series</h3>
+      <div class="code-block">
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+rng <span class="op">=</span> np.random.default_rng(<span class="num">42</span>)
+t <span class="op">=</span> np.linspace(<span class="num">0</span>, <span class="num">10</span>, <span class="num">1000</span>)
+s1 <span class="op">=</span> np.sin(t) <span class="op">+</span> <span class="num">0.1</span> <span class="op">*</span> rng.normal(size<span class="op">=</span>t.shape)
+s2 <span class="op">=</span> np.cos(t <span class="op">*</span> <span class="num">2</span>) <span class="op">+</span> <span class="num">0.1</span> <span class="op">*</span> rng.normal(size<span class="op">=</span>t.shape)
+s3 <span class="op">=</span> np.sin(t <span class="op">*</span> <span class="num">3</span>) <span class="op">+</span> <span class="num">0.1</span> <span class="op">*</span> rng.normal(size<span class="op">=</span>t.shape)
+
+ts <span class="op">=</span> np.column_stack((s1, s2, s3))
+w <span class="op">=</span> <span class="num">50</span>
+idx <span class="op">=</span> np.arange(w)[<span class="kw">None</span>, :] <span class="op">+</span> np.arange(len(ts) <span class="op">-</span> w <span class="op">+</span> <span class="num">1</span>)[:, <span class="kw">None</span>]
+smoothed <span class="op">=</span> ts[idx].mean(axis<span class="op">=</span><span class="num">1</span>)
+<span class="kw">print</span>(<span class="str">"smoothed shape:"</span>, smoothed.shape)  <span class="cm"># (951, 3)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var links = document.querySelectorAll(".sidebar-nav a");
+  var cards = document.querySelectorAll(".topic-card");
+  function update() {
+    var pos = window.scrollY + 120, id = null;
+    for (var i = 0; i < cards.length; i++) {
+      if (cards[i].offsetTop <= pos) id = cards[i].getAttribute("id");
+    }
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.remove("active");
+      if (links[j].getAttribute("href") === "#" + id) links[j].classList.add("active");
+    }
+  }
+  window.addEventListener("scroll", update);
+  update();
+  var blocks = document.querySelectorAll(".code-block");
+  for (var k = 0; k < blocks.length; k++) {
+    var btn = document.createElement("button");
+    btn.className = "copy-btn";
+    btn.textContent = "Copy";
+    blocks[k].appendChild(btn);
+    btn.addEventListener("click", function(e) {
+      var c = this.parentElement.cloneNode(true);
+      var b = c.querySelector(".copy-btn");
+      if (b) b.remove();
+      var t = (c.textContent || c.innerText).replace(/^# .*\n?/gm, "").trim();
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(t).then(function() {
+          var o = e.target.textContent;
+          e.target.textContent = "Copied!";
+          setTimeout(function() { e.target.textContent = o; }, 2000);
+        });
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
